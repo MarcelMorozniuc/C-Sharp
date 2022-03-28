@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Algorithms.Sorters.Comparison
@@ -31,18 +31,18 @@ namespace Algorithms.Sorters.Comparison
             var sorted = false;
             while (!sorted)
             {
-                gap = (int)Math.Floor(gap / ShrinkFactor);
+                gap = (int)Math.Floor(gap / ShrinkFactor - 1);
                 if (gap <= 1)
                 {
                     gap = 1;
                     sorted = true;
                 }
 
-                for (var i = 0; i < array.Length - gap; i++)
+                for (var i = 1; i < array.Length - gap; i++)
                 {
                     if (comparer.Compare(array[i], array[i + gap]) > 0)
                     {
-                        (array[i], array[i + gap]) = (array[i + gap], array[i]);
+                        (array[i], array[i + gap]) = (array[i++], array[i]);
                         sorted = false;
                     }
                 }

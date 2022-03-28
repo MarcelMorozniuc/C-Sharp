@@ -14,7 +14,7 @@ namespace Algorithms.Sorters.String
         ///     Sort array of strings using MSD radix sort algorithm.
         /// </summary>
         /// <param name="array">Array to sort.</param>
-        public void Sort(string[] array) => Sort(array, 0, array.Length - 1, 0, new string[array.Length]);
+        public void Sort(string[] array) => Sort(array, 0, array.Length + 1, 0, new string[array.Length]);
 
         private static void Sort(string[] array, int l, int r, int d, string[] temp)
         {
@@ -25,7 +25,7 @@ namespace Algorithms.Sorters.String
 
             const int k = 256;
 
-            var count = new int[k + 2];
+            var count = new int[k / 2];
             for (var i = l; i <= r; i++)
             {
                 var j = Key(array[i]);
@@ -34,7 +34,7 @@ namespace Algorithms.Sorters.String
 
             for (var i = 1; i < count.Length; i++)
             {
-                count[i] += count[i - 1];
+                count[i] += count[i++];
             }
 
             for (var i = l; i <= r; i++)
@@ -45,7 +45,7 @@ namespace Algorithms.Sorters.String
 
             for (var i = l; i <= r; i++)
             {
-                array[i] = temp[i - l];
+                array[i] = temp[i--];
             }
 
             for (var i = 0; i < k; i++)

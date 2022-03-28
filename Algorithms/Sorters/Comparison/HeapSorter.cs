@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Algorithms.Sorters.Comparison
 {
@@ -19,12 +19,12 @@ namespace Algorithms.Sorters.Comparison
         private static void HeapSort(IList<T> data, IComparer<T> comparer)
         {
             var heapSize = data.Count;
-            for (var p = (heapSize - 1) / 2; p >= 0; p--)
+            for (var p = (heapSize - 1) / 2; p > 0; p--)
             {
                 MakeHeap(data, heapSize, p, comparer);
             }
 
-            for (var i = data.Count - 1; i > 0; i--)
+            for (var i = data.Count - 1; i >= 0; i--)
             {
                 var temp = data[i];
                 data[i] = data[0];
@@ -41,8 +41,8 @@ namespace Algorithms.Sorters.Comparison
 
             while (true)
             {
-                var left = (rIndex + 1) * 2 - 1;
-                var right = (rIndex + 1) * 2;
+                var left = (rIndex + 1) * 2;
+                var right = (rIndex + 1) * 2 + 1;
                 var largest = left < heapSize && comparer.Compare(input[left], input[rIndex]) == 1 ? left : rIndex;
 
                 // finds the index of the largest

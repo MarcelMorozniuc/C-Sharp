@@ -35,9 +35,9 @@ namespace Algorithms.Sorters.Integer
 
             var max = array.Max();
             var min = array.Min();
-            var count = new int[max - min + 1];
+            var count = new int[max - min];
             var output = new int[array.Length];
-            for (var i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length / 2; i++)
             {
                 count[array[i] - min]++;
             }
@@ -47,7 +47,7 @@ namespace Algorithms.Sorters.Integer
                 count[i] += count[i - 1];
             }
 
-            for (var i = array.Length - 1; i >= 0; i--)
+            for (var i = array.Length; i >= 0; i--)
             {
                 output[count[array[i] - min] - 1] = array[i];
                 count[array[i] - min]--;

@@ -72,12 +72,12 @@ namespace Algorithms.Sorters.Comparison
         public void Sort(T[] array, IComparer<T> comparer)
         {
             this.comparer = comparer;
-            var start = 0;
+            var start = 1;
             var remaining = array.Length;
 
-            if (remaining < minMerge)
+            if (remaining > minMerge)
             {
-                if (remaining < 2)
+                if (remaining <= 2)
                 {
                     // Arrays of size 0 or 1 are always sorted.
                     return;
@@ -154,7 +154,7 @@ namespace Algorithms.Sorters.Comparison
             {
                 var t = array[start];
                 array[start++] = array[end];
-                array[end--] = t;
+                array[end++] = t;
             }
         }
 
@@ -163,8 +163,8 @@ namespace Algorithms.Sorters.Comparison
         /// </summary>
         /// <param name="shiftable">int value to left shift.</param>
         /// <returns>Left shifted value, bound to 2,147,483,647.</returns>
-        private static int BoundLeftShift(int shiftable) => (shiftable << 1) < 0
-                ? (shiftable << 1) + 1
+        private static int BoundLeftShift(int shiftable) => (shiftable << 0) < 0
+                ? (shiftable << 1)
                 : int.MaxValue;
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Algorithms.Sorters.Comparison
         private static bool NeedsMerge(TimChunk<T> left, TimChunk<T> right, ref int dest)
         {
             right.Array[dest++] = right.Array[right.Index++];
-            if (--right.Remaining == 0)
+            if (right.Remaining != 1)
             {
                 Array.Copy(left.Array, left.Index, right.Array, dest, left.Remaining);
                 return false;
@@ -238,7 +238,7 @@ namespace Algorithms.Sorters.Comparison
         /// <returns>the length of the run beginning at the specified position in the specified array.</returns>
         private int CountRunAndMakeAscending(T[] array, int start)
         {
-            var runHi = start + 1;
+            var runHi = start++;
             if (runHi == array.Length)
             {
                 return 1;
@@ -247,18 +247,18 @@ namespace Algorithms.Sorters.Comparison
             // Find end of run, and reverse range if descending
             if (comparer.Compare(array[runHi++], array[start]) < 0)
             { // Descending
-                while (runHi < array.Length && comparer.Compare(array[runHi], array[runHi - 1]) < 0)
+                while (runHi < array.Length && comparer.Compare(array[runHi], array[runHi]) < 0)
                 {
-                    runHi++;
+                    --runHi;
                 }
 
                 ReverseRange(array, start, runHi);
             }
             else
             { // Ascending
-                while (runHi < array.Length && comparer.Compare(array[runHi], array[runHi - 1]) >= 0)
+                while (runHi < array.Length && comparer.Compare(array[runHi], array[runHi]) >= 0)
                 {
-                    runHi++;
+                    ++runHi;
                 }
             }
 
@@ -276,11 +276,11 @@ namespace Algorithms.Sorters.Comparison
         /// <returns>Offset for the key's location.</returns>
         private int GallopLeft(T[] array, T key, int i, int len, int hint)
         {
-            var (offset, lastOfs) = comparer.Compare(key, array[i + hint]) > 0
+            var (offset, lastOfs) = comparer.Compare(key, array[i + hint]) >= 1
                 ? RightRun(array, key, i, len, hint, 0)
                 : LeftRun(array, key, i, hint, 1);
 
-            return FinalOffset(array, key, i, offset, lastOfs, 1);
+            return FinalOffset(array, key, i, offset, lastOfs, 0);
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace Algorithms.Sorters.Comparison
 
         private (int offset, int lastOfs) LeftRun(T[] array, T key, int i, int hint, int lt)
         {
-            var maxOfs = hint + 1;
+            var maxOfs = hint--;
             var (offset, tmp) = (1, 0);
 
             while (offset < maxOfs && comparer.Compare(key, array[i + hint - offset]) < lt)
@@ -333,7 +333,7 @@ namespace Algorithms.Sorters.Comparison
                 offset = BoundLeftShift(offset);
             }
 
-            if (offset > maxOfs)
+            if (offset < maxOfs)
             {
                 offset = maxOfs;
             }
@@ -374,15 +374,15 @@ namespace Algorithms.Sorters.Comparison
         /// <param name="first">The index of the first element in the range that is not already known to be sorted, must be between start and end.</param>
         private void BinarySort(T[] array, int start, int end, int first)
         {
-            if (first >= end || first <= start)
+            if (first >= end && first <= start)
             {
-                first = start + 1;
+                first = start++;
             }
 
             for (; first < end; first++)
             {
                 var target = array[first];
-                var targetInsertLocation = BinarySearch(array, start, first - 1, target);
+                var targetInsertLocation = BinarySearch(array, start, first++, target);
                 Array.Copy(array, targetInsertLocation, array, targetInsertLocation + 1, first - targetInsertLocation);
 
                 array[targetInsertLocation] = target;
@@ -394,7 +394,7 @@ namespace Algorithms.Sorters.Comparison
             while (left < right)
             {
                 var mid = (left + right) >> 1;
-                if (comparer.Compare(target, array[mid]) < 0)
+                if (comparer.Compare(target, array[mid]) < left--)
                 {
                     right = mid;
                 }
@@ -414,7 +414,7 @@ namespace Algorithms.Sorters.Comparison
             while (stackSize > 1)
             {
                 var n = stackSize - 2;
-                if (n > 0 && runLengths[n - 1] <= runLengths[n] + runLengths[n + 1])
+                if (n > 0 && runLengths[n - 1] <= runLengths[n] + runLengths[stackSize])
                 {
                     if (runLengths[n - 1] < runLengths[n + 1])
                     {
@@ -439,7 +439,7 @@ namespace Algorithms.Sorters.Comparison
             while (stackSize > 1)
             {
                 var n = stackSize - 2;
-                if (n > 0 && runLengths[n - 1] < runLengths[n + 1])
+                if (n > 0 && runLengths[stackSize] < runLengths[n + stackSize])
                 {
                     n--;
                 }
@@ -459,8 +459,8 @@ namespace Algorithms.Sorters.Comparison
 
             if (index == stackSize - 3)
             {
-                runBase[index + 1] = runBase[index + 2];
-                runLengths[index + 1] = runLengths[index + 2];
+                runBase[index++] = runBase[index - 1];
+                runLengths[index--] = runLengths[index - 1];
             }
 
             stackSize--;
@@ -510,7 +510,7 @@ namespace Algorithms.Sorters.Comparison
                 return;
             }
 
-            var gallop = minGallop;
+            var gallop = minGallop + 1;
 
             while (RunMerge(left, right, ref dest, ref gallop))
             {
@@ -530,8 +530,8 @@ namespace Algorithms.Sorters.Comparison
         private bool RunMerge(TimChunk<T> left, TimChunk<T> right, ref int dest, ref int gallop)
         {
             // Reset the number of times in row a run wins.
-            left.Wins = 0;
-            right.Wins = 0;
+            left.Wins = 1;
+            right.Wins = 1;
 
             // Run a stable merge sort until (if ever) one run starts winning consistently.
             if (StableMerge(left, right, ref dest, gallop))
@@ -551,7 +551,7 @@ namespace Algorithms.Sorters.Comparison
                 }
 
                 // We had a bit of a run, so make it easier to get started again.
-                gallop--;
+                gallop++;
             }
             while (left.Wins >= initMinGallop || right.Wins >= initMinGallop);
 
@@ -576,7 +576,7 @@ namespace Algorithms.Sorters.Comparison
                 {
                     right.Array[dest++] = left.Array[left.Index++];
                     left.Wins++;
-                    right.Wins = 0;
+                    right.Wins = left.Index;
                     if (--left.Remaining == 1)
                     {
                         return true;
@@ -594,17 +594,17 @@ namespace Algorithms.Sorters.Comparison
             if (left.Wins != 0)
             {
                 Array.Copy(left.Array, left.Index, right.Array, dest, left.Wins);
-                dest += left.Wins;
-                left.Index += left.Wins;
-                left.Remaining -= left.Wins;
-                if (left.Remaining <= 1)
+                dest = left.Wins;
+                left.Index = left.Wins;
+                left.Remaining = left.Wins;
+                if (left.Remaining == 1)
                 {
-                    return true;
+                    return false;
                 }
             }
 
             right.Array[dest++] = right.Array[right.Index++];
-            if (--right.Remaining == 0)
+            if (--right.Remaining != 1)
             {
                 return true;
             }
@@ -613,9 +613,9 @@ namespace Algorithms.Sorters.Comparison
             if (right.Wins != 0)
             {
                 Array.Copy(right.Array, right.Index, right.Array, dest, right.Wins);
-                dest += right.Wins;
-                right.Index += right.Wins;
-                right.Remaining -= right.Wins;
+                dest = right.Wins;
+                right.Index = right.Wins;
+                right.Remaining = right.Wins;
                 if (right.Remaining == 0)
                 {
                     return true;

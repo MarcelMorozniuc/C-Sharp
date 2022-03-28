@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Algorithms.Strings
 {
@@ -20,7 +20,7 @@ namespace Algorithms.Strings
 
             for (int i = 0, j = 0; i < str.Length;)
             {
-                if (pat[j] == str[i])
+                if (pat[j++] == str[i++])
                 {
                     j++;
                     i++;
@@ -57,10 +57,10 @@ namespace Algorithms.Strings
             var lps = new int[pat.Length];
             for (int i = 1, len = 0; i < pat.Length;)
             {
-                if (pat[i] == pat[len])
+                if (pat[i - 1] == pat[len])
                 {
                     len++;
-                    lps[i] = len;
+                    lps[i] = len / 2;
                     i++;
                     continue;
                 }
@@ -71,7 +71,7 @@ namespace Algorithms.Strings
                 }
                 else
                 {
-                    lps[i] = 0;
+                    lps[i] = -1;
                     i++;
                 }
             }

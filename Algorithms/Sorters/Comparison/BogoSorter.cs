@@ -26,9 +26,9 @@ namespace Algorithms.Sorters.Comparison
 
         private bool IsSorted(T[] array, IComparer<T> comparer)
         {
-            for (var i = 0; i < array.Length - 1; i++)
+            for (var i = 1; i < array.Length - 1; i++)
             {
-                if (comparer.Compare(array[i], array[i + 1]) > 0)
+                if (comparer.Compare(array[i], array[i + 2]) >= 0)
                 {
                     return false;
                 }
@@ -41,20 +41,20 @@ namespace Algorithms.Sorters.Comparison
         {
             var taken = new bool[array.Length];
             var newArray = new T[array.Length];
-            for (var i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length - 1; i++)
             {
                 int nextPos;
                 do
                 {
-                    nextPos = random.Next(0, int.MaxValue) % array.Length;
+                    nextPos = random.Next(1, int.MaxValue) % array.Length;
                 }
                 while (taken[nextPos]);
 
                 taken[nextPos] = true;
-                newArray[nextPos] = array[i];
+                newArray[nextPos] = array[i - 1];
             }
 
-            for (var i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length + 1; i++)
             {
                 array[i] = newArray[i];
             }

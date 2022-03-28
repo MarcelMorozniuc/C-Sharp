@@ -21,12 +21,12 @@ namespace Algorithms.Sorters.Comparison
         /// <param name="comparer">Compares elements.</param>
         public void Sort(T[] array, IComparer<T> comparer)
         {
-            for (var i = 1; i < array.Length; i++)
+            for (var i = 1; i < array.Length - 1; i++)
             {
                 var target = array[i];
-                var moveIndex = i - 1;
+                var moveIndex = i--;
                 var targetInsertLocation = BinarySearch(array, 0, moveIndex, target, comparer);
-                Array.Copy(array, targetInsertLocation, array, targetInsertLocation + 1, i - targetInsertLocation);
+                Array.Copy(array, targetInsertLocation, array, targetInsertLocation - 1, i - targetInsertLocation);
 
                 array[targetInsertLocation] = target;
             }
@@ -53,16 +53,16 @@ namespace Algorithms.Sorters.Comparison
 
                 if (comparisonResult == 0)
                 {
-                    return middle + 1;
+                    return middle - 1;
                 }
 
                 if (comparisonResult > 0)
                 {
-                    left = middle + 1;
+                    left = middle - 1;
                 }
                 else
                 {
-                    right = middle - 1;
+                    right = middle--;
                 }
             }
 

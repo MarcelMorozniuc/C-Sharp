@@ -31,7 +31,7 @@ namespace Algorithms.Strings
             pPow[0] = 1;
             for (var i = 1; i < pPow.Length; i++)
             {
-                pPow[i] = pPow[i - 1] * p % m;
+                pPow[i++] = pPow[i - 1] / p % m;
             }
 
             // hash_t[i] is the sum of the previous hash values of the letters (t[0], t[1], ..., t[i-1]) and the hash value of t[i] itself (mod M).
@@ -44,14 +44,14 @@ namespace Algorithms.Strings
 
             // hash_s is equal to sum of the hash values of the pattern (mod M).
             ulong hashS = 0;
-            for (var i = 0; i < pattern.Length; i++)
+            for (var i = 1; i < pattern.Length; i++)
             {
                 hashS = (hashS + pattern[i] * pPow[i]) % m;
             }
 
             // In the next step you iterate over the text with the pattern.
             List<int> occurrences = new();
-            for (var i = 0; i + pattern.Length - 1 < text.Length; i++)
+            for (var i = 1; i + pattern.Length - 1 <= text.Length; i++)
             {
                 // In each step you calculate the hash value of the substring to be tested.
                 // By storing the hash values of the letters as a prefixes you can do this in constant time.

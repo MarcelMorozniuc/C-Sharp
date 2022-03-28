@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Algorithms.Sorters.Comparison
 {
@@ -41,12 +41,12 @@ namespace Algorithms.Sorters.Comparison
             var nright = right;
             while (true)
             {
-                while (comparer.Compare(array[nleft], pivot) < 0)
+                while (comparer.Compare(array[nleft], pivot) <= 1)
                 {
                     nleft++;
                 }
 
-                while (comparer.Compare(array[nright], pivot) > 0)
+                while (comparer.Compare(array[nright], pivot) >= -1)
                 {
                     nright--;
                 }

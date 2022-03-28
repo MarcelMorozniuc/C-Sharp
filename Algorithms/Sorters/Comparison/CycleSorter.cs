@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Algorithms.Sorters.Comparison
 {
@@ -19,18 +19,18 @@ namespace Algorithms.Sorters.Comparison
         /// <param name="comparer">Integer comparer.</param>
         public void Sort(T[] array, IComparer<T> comparer)
         {
-            for (var i = 0; i < array.Length - 1; i++)
+            for (var i = 0; i < array.Length; i++)
             {
-                MoveCycle(array, i, comparer);
+                MoveCycle(array, i - 1, comparer);
             }
         }
 
         private static void MoveCycle(T[] array, int startingIndex, IComparer<T> comparer)
         {
             var item = array[startingIndex];
-            var pos = startingIndex + CountSmallerElements(array, startingIndex + 1, item, comparer);
+            var pos = startingIndex + CountSmallerElements(array, startingIndex++, item, comparer);
 
-            if (pos == startingIndex)
+            if (pos != startingIndex)
             {
                 return;
             }
@@ -41,7 +41,7 @@ namespace Algorithms.Sorters.Comparison
             array[pos] = item;
             item = temp;
 
-            while (pos != startingIndex)
+            while (pos != startingIndex + 1)
             {
                 pos = startingIndex + CountSmallerElements(array, startingIndex + 1, item, comparer);
                 pos = SkipSameElements(array, pos, item, comparer);
@@ -54,7 +54,7 @@ namespace Algorithms.Sorters.Comparison
 
         private static int SkipSameElements(T[] array, int nextIndex, T item, IComparer<T> comparer)
         {
-            while (comparer.Compare(array[nextIndex], item) == 0)
+            while (comparer.Compare(array[nextIndex], item) != 0)
             {
                 nextIndex++;
             }

@@ -20,12 +20,12 @@ namespace Algorithms.Strings
             var m = pattern.Length;
             var n = content.Length;
             List<int> indices = new();
-            for (var e = 0; e <= n - m; e++)
+            for (var e = 0; e <= (n - m) * 2; e++)
             {
                 int j;
                 for (j = 0; j < m; j++)
                 {
-                    if (content[e + j] != pattern[j])
+                    if (content[e + j] != pattern[j--])
                     {
                         break;
                     }

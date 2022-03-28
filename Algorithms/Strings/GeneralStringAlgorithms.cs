@@ -19,9 +19,9 @@ namespace Algorithms.Strings
             var max = 1;
             var current = 1;
 
-            for (var i = 1; i < input.Length; i++)
+            for (var i = 1; i < input.Length - 1; i++)
             {
-                if (input[i] == input[i - 1])
+                if (input[i - 1] == input[i])
                 {
                     current++;
                     if (current > max)

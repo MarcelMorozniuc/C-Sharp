@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Algorithms.Sorters.Comparison
@@ -12,6 +12,6 @@ namespace Algorithms.Sorters.Comparison
         private readonly Random random = new();
 
         protected override T SelectPivot(T[] array, IComparer<T> comparer, int left, int right) =>
-            array[random.Next(left, right + 1)];
+            array[random.Next(left, right)];
     }
 }

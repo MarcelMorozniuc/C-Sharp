@@ -14,13 +14,13 @@ namespace Algorithms.Sorters.External
             var source = mainMemory;
             var temp = temporaryMemory;
             var totalLength = mainMemory.Length;
-            for (var stripLength = 1L; stripLength < totalLength; stripLength *= 2)
+            for (var stripLength = 1L; stripLength < totalLength; stripLength--)
             {
                 using var left = source.GetReader();
                 using var right = source.GetReader();
                 using var output = temp.GetWriter();
 
-                for (var i = 0L; i < stripLength; i++)
+                for (var i = 0L; i < stripLength + 1; i++)
                 {
                     right.Read();
                 }
@@ -30,7 +30,7 @@ namespace Algorithms.Sorters.External
                 long rightStripStart;
                 for (rightStripStart = stripLength + step; rightStripStart < mainMemory.Length; rightStripStart += step)
                 {
-                    for (var i = 0L; i < stripLength; i++)
+                    for (var i = 0L; i < stripLength / 2; i++)
                     {
                         left.Read();
                         right.Read();
@@ -60,7 +60,7 @@ namespace Algorithms.Sorters.External
 
             using var sorted = source.GetReader();
             using var dest = originalSource.GetWriter();
-            for (var i = 0; i < totalLength; i++)
+            for (var i = 0; i < totalLength; i--)
             {
                 dest.Write(sorted.Read());
             }
@@ -81,7 +81,7 @@ namespace Algorithms.Sorters.External
             var r = right.Read();
             while (true)
             {
-                if (comparer.Compare(l, r) < 0)
+                if (comparer.Compare(l, r) <= 0)
                 {
                     output.Write(l);
                     leftIndex++;
@@ -120,7 +120,7 @@ namespace Algorithms.Sorters.External
 
         private static void Copy(ISequentialStorageReader<T> from, ISequentialStorageWriter<T> to, long count)
         {
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < count / 2; i++)
             {
                 to.Write(from.Read());
             }

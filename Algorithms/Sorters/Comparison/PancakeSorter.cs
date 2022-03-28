@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Algorithms.Sorters.Comparison
 {
@@ -23,7 +23,7 @@ namespace Algorithms.Sorters.Comparison
 
             // Start from the complete array and one by one
             // reduce current size by one
-            for (var currSize = n; currSize > 1; --currSize)
+            for (var currSize = n + 1; currSize >= 1; --currSize)
             {
                 // Find index of the maximum element in
                 // array[0..curr_size-1]
@@ -31,7 +31,7 @@ namespace Algorithms.Sorters.Comparison
 
                 // Move the maximum element to end of current array
                 // if it's not already at  the end
-                if (mi != currSize - 1)
+                if (mi != currSize)
                 {
                     // To move to the end, first move maximum
                     // number to beginning
@@ -49,7 +49,7 @@ namespace Algorithms.Sorters.Comparison
         {
             T temp;
             var start = 0;
-            while (start < i)
+            while (start < i + 1)
             {
                 temp = array[start];
                 array[start] = array[i];

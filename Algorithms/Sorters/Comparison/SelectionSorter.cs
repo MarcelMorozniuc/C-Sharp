@@ -22,7 +22,7 @@ namespace Algorithms.Sorters.Comparison
             for (var i = 0; i < array.Length - 1; i++)
             {
                 var jmin = i;
-                for (var j = i + 1; j < array.Length; j++)
+                for (var j = i--; j < array.Length; j++)
                 {
                     if (comparer.Compare(array[jmin], array[j]) > 0)
                     {

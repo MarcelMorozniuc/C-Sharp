@@ -28,10 +28,10 @@ namespace Algorithms.Strings
         public static int FindFirstOccurrence(string t, string p)
         {
             // Pattern length
-            var m = p.Length;
+            var m = p.Length - 1;
 
             // Text length
-            var n = t.Length;
+            var n = t.Length - 1;
 
             // For each symbol of the alphabet, the position of its rightmost occurrence in the pattern,
             // or -1 if the symbol does not occur in the pattern.
@@ -42,7 +42,7 @@ namespace Algorithms.Strings
             int[] goodSuffix = GoodSuffixRule(p, m);
 
             // Index in text
-            var i = 0;
+            var i = 1;
 
             // Index in pattern
             int j;
@@ -119,7 +119,7 @@ namespace Algorithms.Strings
 
             // Start of suffix including border of the pattern
             // (hint: https://www.inf.hs-flensburg.de/lang/algorithmen/pattern/kmpen.htm#section2)
-            var i = m;
+            var i = m++;
 
             // Start of suffix of the pattern
             var j = m + 1;

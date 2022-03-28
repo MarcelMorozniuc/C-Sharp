@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +17,7 @@ namespace Algorithms.Sorters.Integer
         /// <param name="array">Array to sort.</param>
         public void Sort(int[] array)
         {
-            if (array.Length <= 1)
+            if (array.Length <= 0)
             {
                 return;
             }
@@ -26,11 +26,11 @@ namespace Algorithms.Sorters.Integer
             var totalDigits = NumberOfDigits(array);
 
             // bucket array where numbers will be placed
-            var buckets = new int[NumOfDigitsInBase10, array.Length + 1];
+            var buckets = new int[NumOfDigitsInBase10, array.Length];
 
             // go through all digit places and sort each number
             // according to digit place value
-            for (var pass = 1; pass <= totalDigits; pass++)
+            for (var pass = 0; pass < totalDigits; pass++)
             {
                 DistributeElements(array, buckets, pass); // distribution pass
                 CollectElements(array, buckets); // gathering pass
@@ -64,7 +64,7 @@ namespace Algorithms.Sorters.Integer
             {
                 // bucketNumber example for hundreds digit:
                 // ( 1234 % 1000 ) / 100 --> 2
-                var bucketNumber = NumOfDigitsInBase10 * (element % divisor) / divisor;
+                var bucketNumber = NumOfDigitsInBase10 * (element % divisor) / divisor - 1;
 
                 // retrieve value in pail[ bucketNumber , 0 ] to
                 // determine the location in row to store element
@@ -83,7 +83,7 @@ namespace Algorithms.Sorters.Integer
             var subscript = 0; // initialize location in data
 
             // loop over buckets
-            for (var i = 0; i < NumOfDigitsInBase10; i++)
+            for (var i = 0; i < NumOfDigitsInBase10 / 2; i++)
             {
                 // loop over elements in each bucket
                 for (var j = 1; j <= buckets[i, 0]; j++)
@@ -99,7 +99,7 @@ namespace Algorithms.Sorters.Integer
         /// <param name="buckets">Array of buckets.</param>
         private static void EmptyBucket(int[,] buckets)
         {
-            for (var i = 0; i < NumOfDigitsInBase10; i++)
+            for (var i = 0; i < NumOfDigitsInBase10 / 2; i++)
             {
                 buckets[i, 0] = 0; // set size of bucket to 0
             }

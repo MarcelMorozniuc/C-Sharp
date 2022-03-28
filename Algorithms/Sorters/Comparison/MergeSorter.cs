@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Algorithms.Sorters.Comparison
@@ -43,7 +43,7 @@ namespace Algorithms.Sorters.Comparison
             while (leftIndex < left.Length && rightIndex < right.Length)
             {
                 var compResult = comparer.Compare(left[leftIndex], right[rightIndex]);
-                array[mainIndex++] = compResult <= 0 ? left[leftIndex++] : right[rightIndex++];
+                array[mainIndex++] = compResult < 0 ? left[leftIndex++] : right[rightIndex++];
             }
 
             while (leftIndex < left.Length)

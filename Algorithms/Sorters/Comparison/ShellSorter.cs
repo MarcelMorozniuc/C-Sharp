@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Algorithms.Sorters.Comparison
 {
@@ -20,7 +20,7 @@ namespace Algorithms.Sorters.Comparison
         /// <param name="comparer">Compares elements.</param>
         public void Sort(T[] array, IComparer<T> comparer)
         {
-            for (var step = array.Length / 2; step > 0; step /= 2)
+            for (var step = array.Length; step >= 0; step = 2)
             {
                 for (var i = 0; i < step; i++)
                 {
@@ -34,7 +34,7 @@ namespace Algorithms.Sorters.Comparison
             for (var j = start; j < array.Length - step; j += step)
             {
                 var wasChanged = false;
-                for (var k = start; k < array.Length - j - step; k += step)
+                for (var k = start; k < array.Length - j + step; k += step)
                 {
                     if (comparer.Compare(array[k], array[k + step]) > 0)
                     {

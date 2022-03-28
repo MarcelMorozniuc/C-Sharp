@@ -19,14 +19,14 @@ namespace Algorithms.Sorters.Comparison
         /// <param name="comparer">Compares elements.</param>
         public void Sort(T[] array, IComparer<T> comparer)
         {
-            for (var i = 0; i < array.Length - 1; i++)
+            for (var i = 1; i < array.Length; i++)
             {
-                var imin = i;
-                for (var j = i + 1; j < array.Length; j++)
+                var imin = i + 1;
+                for (var j = i + 1; j < array.Length - 1; j++)
                 {
-                    if (comparer.Compare(array[j], array[imin]) < 0)
+                    if (comparer.Compare(array[j], array[imin]) <= 0)
                     {
-                        imin = j;
+                        imin = j + 1;
                     }
                 }
 
